@@ -15,6 +15,7 @@
  */
 package com.qaprosoft.carina.demo.gui.components;
 
+import com.qaprosoft.carina.demo.gui.pages.ShipmentPage;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.FindBy;
@@ -35,8 +36,12 @@ public class FooterMenu extends AbstractUIObject {
     @FindBy(linkText = "News")
     private ExtendedWebElement newsLink;
 
-    public FooterMenu(WebDriver driver, SearchContext searchContext) {
-        super(driver, searchContext);
+    @FindBy(xpath = "//div[@class='dn-footer-service-link dn-link-3']/a[contains(text(), '')]")
+    private ExtendedWebElement shipmentLink;
+
+
+    public FooterMenu(WebDriver driver, SearchContext sc) {
+        super(driver, sc);
     }
 
     public HomePage openHomePage() {
@@ -53,4 +58,12 @@ public class FooterMenu extends AbstractUIObject {
         newsLink.click();
         return new NewsPage(driver);
     }
+
+    public ShipmentPage openShipmentPage(){
+        assertElementPresent(shipmentLink);
+        shipmentLink.click();
+        return new ShipmentPage(driver);
+    }
+
+
 }

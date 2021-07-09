@@ -20,6 +20,7 @@ import java.util.List;
 
 import com.qaprosoft.carina.core.foundation.utils.Configuration;
 import com.qaprosoft.carina.core.foundation.utils.R;
+import com.qaprosoft.carina.demo.gui.components.*;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.FindBy;
 import org.slf4j.Logger;
@@ -27,25 +28,50 @@ import org.slf4j.LoggerFactory;
 
 import com.qaprosoft.carina.core.foundation.webdriver.decorator.ExtendedWebElement;
 import com.qaprosoft.carina.core.gui.AbstractPage;
-import com.qaprosoft.carina.demo.gui.components.FooterMenu;
-import com.qaprosoft.carina.demo.gui.components.WeValuePrivacyAd;
 
 
 public class HomePage extends AbstractPage {
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-    @FindBy(id = "footmenu")
+    @FindBy(xpath = "//div[@class='dn-footer-service']")
     private FooterMenu footerMenu;
 
-    @FindBy(xpath = "//div[contains(@class, 'brandmenu-v2')]//a")
-    private List<ExtendedWebElement> brandLinks;
+    @FindBy(className = "tms-slider")
+    private ExtendedWebElement tmsSlider;
 
-    @FindBy(className = "news-column-index")
-    private ExtendedWebElement newsColumn;
+    @FindBy(xpath = "//li[@class='top left']")
+    private ExtendedWebElement topLeft;
+
+    @FindBy(xpath = "//div[@class='dn-middle-menu-wrap']/a[contains(text(), 'Каталог товаров')]")
+    private ExtendedWebElement catalog;
+
+    @FindBy(xpath = "//div[@class='news-item']")
+    private List<NewsItem> news;
+
+    @FindBy(xpath = "//form")
+    private ExtendedWebElement searchField;
+
+    @FindBy(xpath = "//input[@class='multi-input']")
+    private ExtendedWebElement searchTextField;
+
+    @FindBy(xpath = "//div[@class='multi-content']")
+    private List<SearchItem> items;
+
+    @FindBy(xpath = "//div[@class='dn-bm-login']/a/span")
+    private ExtendedWebElement cabinet;
+
+    @FindBy(xpath = "//div[@class='dn-login-dropdown dn-logoff-dropdown']/a[contains(text(), 'Войти')]")
+    private ExtendedWebElement login;
+
+    @FindBy(xpath = "//jdiv[@class='hoverl_b520']")
+    private ExtendedWebElement consult;
+
+    @FindBy(xpath = "//jdiv[@class='closeIcon_c499']")
+    private ExtendedWebElement consultClose;
 
     public HomePage(WebDriver driver) {
         super(driver);
-        setUiLoadedMarker(newsColumn);
+        setUiLoadedMarker(tmsSlider);
         setPageAbsoluteURL(R.CONFIG.get(Configuration.Parameter.URL.getKey()));
     }
 
@@ -53,6 +79,39 @@ public class HomePage extends AbstractPage {
         return footerMenu;
     }
 
+    public AboutUsPage openAboutUsPage() {
+        assertElementPresent(topLeft);
+        topLeft.click();
+        return new AboutUsPage(driver);
+    }
+
+    public List<SearchItem> searchFor(String q) {
+        searchField.click();
+        searchTextField.type(q);
+        return items;
+    }
+
+    public CatalogPage openCatalogPage() {
+        assertElementPresent(catalog);
+        catalog.click();
+        return new CatalogPage(driver);
+    }
+
+    public void openConsultant() {
+        assertElementPresent(consult);
+        consult.click();
+        assertElementPresent(consultClose);
+        consultClose.click();
+    }
+
+    public Cabinet openCabinet() {
+        assertElementPresent(cabinet);
+        cabinet.click();
+        login.click();
+        return new Cabinet(driver);
+    }
+
+    /*
     public BrandModelsPage selectBrand(String brand) {
         LOGGER.info("selecting '" + brand + "' brand...");
         for (ExtendedWebElement brandLink : brandLinks) {
@@ -64,9 +123,14 @@ public class HomePage extends AbstractPage {
             }
         }
         throw new RuntimeException("Unable to open brand: " + brand);
+    }*/
+
+    public List<NewsItem> searchStore(String q) {
+        searchTextField.type(q);
+        return news;
     }
-    
+
     public WeValuePrivacyAd getWeValuePrivacyAd() {
-    	return new WeValuePrivacyAd(driver);
+        return new WeValuePrivacyAd(driver);
     }
 }
