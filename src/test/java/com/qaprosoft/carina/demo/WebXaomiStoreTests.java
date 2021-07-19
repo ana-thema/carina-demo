@@ -8,13 +8,20 @@ import com.qaprosoft.carina.demo.gui.pages.*;
 import com.zebrunner.agent.core.annotation.TestLabel;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 
+import java.lang.invoke.MethodHandles;
 import java.util.List;
 
 public class WebXaomiStoreTests implements IAbstractTest {
+    private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+
+    private final String SEARCHQ = "redmi";
+
     @Test()
     public void testAboutUsPage() {
         HomePage homePage = new HomePage(getDriver());
@@ -42,7 +49,7 @@ public class WebXaomiStoreTests implements IAbstractTest {
         String name;
         for(CatalogItem n : items) {
             name = n.readTitle();
-            System.out.println(name);
+            LOGGER.info(name);
             softAssert.assertTrue(StringUtils.containsIgnoreCase(name, "Смартфон"),
                     "Invalid search results for " + name);
         }
@@ -75,13 +82,13 @@ public class WebXaomiStoreTests implements IAbstractTest {
         homePage.open();
         Assert.assertTrue(homePage.isPageOpened(), "Home page is not opened");
         homePage.getWeValuePrivacyAd().closeAdIfPresent();
-        final String searchQ = "redmi";
-        List<SearchItem> items = homePage.searchFor(searchQ);
-        Assert.assertFalse(CollectionUtils.isEmpty(items), "News not found!");
+
+        List<SearchItem> items = homePage.searchFor(SEARCHQ);
+        Assert.assertFalse(CollectionUtils.isEmpty(items), "Items not found!");
         SoftAssert softAssert = new SoftAssert();
         for(SearchItem n : items) {
-            System.out.println(n.readTitle());
-            softAssert.assertTrue(StringUtils.containsIgnoreCase(n.readTitle(), searchQ),
+            LOGGER.info(n.readTitle());
+            softAssert.assertTrue(StringUtils.containsIgnoreCase(n.readTitle(), SEARCHQ),
                     "Invalid search results for " + n.readTitle());
         }
         softAssert.assertAll();
