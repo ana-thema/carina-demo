@@ -3,8 +3,10 @@ package com.qaprosoft.carina.demo.mobile.gui.pages.ios;
 import com.qaprosoft.carina.core.foundation.utils.factory.DeviceType;
 import com.qaprosoft.carina.core.foundation.webdriver.decorator.ExtendedWebElement;
 import com.qaprosoft.carina.core.foundation.webdriver.locator.ExtendedFindBy;
+import com.qaprosoft.carina.demo.mobile.gui.pages.additional.Macros;
 import com.qaprosoft.carina.demo.mobile.gui.pages.common.ProfilePageBase;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.FindBy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,13 +25,13 @@ public class ProfilePage extends ProfilePageBase {
     @ExtendedFindBy(iosClassChain = "**/XCUIElementTypeStaticText[`name == 'Nutrition'`]")
     private ExtendedWebElement nutrition;
 
-    @ExtendedFindBy(iosClassChain = "**/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther[2]/XCUIElementTypeOther/XCUIElementTypeScrollView/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeScrollView/XCUIElementTypeOther[1]/XCUIElementTypeTable/XCUIElementTypeCell[1]/XCUIElementTypeStaticText[2]")
+    @FindBy(xpath = "//XCUIElementTypeStaticText[@name='Total Calories']/following-sibling::XCUIElementTypeStaticText")
     private ExtendedWebElement total;
 
-    @ExtendedFindBy(iosClassChain = "**/XCUIElementTypeScrollView/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeScrollView/XCUIElementTypeOther[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther[5]/XCUIElementTypeStaticText[1]")
+    @FindBy(xpath = "//XCUIElementTypeScrollView/XCUIElementTypeOther[1]/*/*/XCUIElementTypeOther[5]/XCUIElementTypeStaticText[1]")
     private ExtendedWebElement breakPercentage;
 
-    @ExtendedFindBy(iosClassChain = "**/XCUIElementTypeScrollView/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeScrollView/XCUIElementTypeOther[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther[5]/XCUIElementTypeStaticText[2]")
+    @FindBy(xpath = "//XCUIElementTypeScrollView/XCUIElementTypeOther[1]/*/*/XCUIElementTypeOther[5]/XCUIElementTypeStaticText[2]")
     private ExtendedWebElement lunchPercentage;
 
     @ExtendedFindBy(iosClassChain = "**/XCUIElementTypeOther[`name == 'MFPSlidingTabBarTabView'`][2]")
@@ -38,16 +40,16 @@ public class ProfilePage extends ProfilePageBase {
     @ExtendedFindBy(iosClassChain = "**/XCUIElementTypeOther[`name == 'MFPSlidingTabBarTabView'`][3]")
     private ExtendedWebElement macros;
 
-    @ExtendedFindBy(iosClassChain = "**/XCUIElementTypeScrollView/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[5]/XCUIElementTypeStaticText[2]")
+    @ExtendedFindBy(iosClassChain = "**/XCUIElementTypeTable/XCUIElementTypeCell[5]/XCUIElementTypeStaticText[2]")
     private ExtendedWebElement fat;
 
-    @ExtendedFindBy(iosClassChain = "**/XCUIElementTypeScrollView/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[2]/XCUIElementTypeStaticText[2]")
+    @ExtendedFindBy(iosClassChain = "**/XCUIElementTypeTable/XCUIElementTypeCell[2]/XCUIElementTypeStaticText[2]")
     private ExtendedWebElement carbs;
 
-    @ExtendedFindBy(iosClassChain = "**/XCUIElementTypeScrollView/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[4]/XCUIElementTypeStaticText[2]")
+    @ExtendedFindBy(iosClassChain = "**/XCUIElementTypeTable/XCUIElementTypeCell[4]/XCUIElementTypeStaticText[2]")
     private ExtendedWebElement sugar;
 
-    @ExtendedFindBy(iosClassChain = "**/XCUIElementTypeScrollView/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]/XCUIElementTypeStaticText[2]")
+    @ExtendedFindBy(iosClassChain = "**/XCUIElementTypeTable/XCUIElementTypeCell[1]/XCUIElementTypeStaticText[2]")
     private ExtendedWebElement protein;
 
     @ExtendedFindBy(iosClassChain = "**/XCUIElementTypeStaticText[`name == 'MacroLegendTableViewCell_total_label'`][1]")
@@ -198,8 +200,8 @@ public class ProfilePage extends ProfilePageBase {
     }
 
     @Override
-    public double getTotalMacros(double i1carbs, double i1fats, double i1protein, double i2carbs, double i2fats, double i2protein) {
-        return i1carbs + i1fats + i1protein + i2carbs + i2fats + i2protein;
+    public double getTotalMacros(Macros macros) {
+        return macros.getI1carbs()+macros.getI2carbs()+macros.getI1fats()+macros.getI2fats()+macros.getI1protein()+macros.getI2protein();
     }
 
     @Override

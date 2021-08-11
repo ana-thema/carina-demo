@@ -1,6 +1,8 @@
 package com.qaprosoft.carina.demo.mobile.gui.pages.common;
 
 import com.qaprosoft.carina.core.gui.AbstractPage;
+import com.qaprosoft.carina.demo.mobile.gui.pages.additional.Meals;
+import com.qaprosoft.carina.demo.mobile.gui.pages.additional.Nutrients;
 import org.openqa.selenium.WebDriver;
 
 public abstract class DiaryPageBase extends AbstractPage {
@@ -8,31 +10,19 @@ public abstract class DiaryPageBase extends AbstractPage {
         super(driver);
     }
 
-    public abstract void addBreakfast();
+    public abstract MealsPageBase addFood(Meals meal);
 
-    public abstract void addLunch();
+    public abstract ExercisePageBase clickExercise();
 
-    public abstract void quickAddLunch(String amount);
+    public abstract void clickAlert();
 
     public abstract int getItemCalories();
 
-    public abstract int getBreakfastCalories();
+    public abstract int getMealCalories(Meals meal);
 
     public abstract void save();
 
-    public abstract void addExercise();
-
-    public abstract double getFats();
-
-    public abstract double getCarbs();
-
-    public abstract double getSugar();
-
-    public abstract double getProtein();
-
     public abstract int getItemsCalories();
-
-    public abstract int getLunchCalories();
 
     public abstract ProfilePageBase openProfile();
 }

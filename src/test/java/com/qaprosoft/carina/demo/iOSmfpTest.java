@@ -4,13 +4,28 @@ import com.qaprosoft.carina.core.foundation.IAbstractTest;
 import com.qaprosoft.carina.core.foundation.utils.mobile.IMobileUtils;
 import com.qaprosoft.carina.core.foundation.utils.tag.Priority;
 import com.qaprosoft.carina.core.foundation.utils.tag.TestPriority;
+import com.qaprosoft.carina.demo.gui.components.NewsItem;
+import com.qaprosoft.carina.demo.mobile.gui.pages.additional.*;
 import com.qaprosoft.carina.demo.mobile.gui.pages.common.*;
+import com.qaprosoft.carina.demo.mobile.gui.pages.ios.ExerciseRoutinePage;
+import com.qaprosoft.carina.demo.mobile.gui.pages.ios.MealsPage;
 import org.apache.commons.lang.RandomStringUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 
+import java.lang.invoke.MethodHandles;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class iOSmfpTest implements IAbstractTest, IMobileUtils {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     public String randEmail = RandomStringUtils.random(10, true, true);
     public String randPasswd = RandomStringUtils.random(10, true, true);
@@ -33,24 +48,28 @@ public class iOSmfpTest implements IAbstractTest, IMobileUtils {
         Assert.assertTrue(homePage.isPageOpened(), "Home page isn't opened");
         DiaryPageBase diaryPage = homePage.openDiary();
         Assert.assertTrue(diaryPage.isPageOpened(), "Diary page isn't opened");
-        diaryPage.addBreakfast();
-        double i1protein = diaryPage.getProtein();
-        double i1carbs = diaryPage.getCarbs();
-        double i1fats = diaryPage.getFats();
-        double i1sugar = diaryPage.getSugar();
+        diaryPage.addFood(Meals.BREAKFAST).addBreakfast(); // спросить про локатор
+        MealsPageBase mealsPage = new MealsPage(getDriver());
+        double i1protein = mealsPage.getNutrients(Nutrients.PROTEIN);
+        double i1carbs = mealsPage.getNutrients(Nutrients.CARBS);
+        double i1fats = mealsPage.getNutrients(Nutrients.FAT);
+        double i1sugar = mealsPage.getNutrients(Nutrients.SUGAR);
         diaryPage.save();
-        int breakfastCalories = diaryPage.getBreakfastCalories();
+        int breakfastCalories = diaryPage.getMealCalories(Meals.BREAKFAST);
         Assert.assertEquals(diaryPage.getItemCalories(), breakfastCalories, "Calories amount is not equal!");
-        diaryPage.addLunch();
-        double i2protein = diaryPage.getProtein();
-        double i2carbs = diaryPage.getCarbs();
-        double i2fats = diaryPage.getFats();
-        double i2sugar = diaryPage.getSugar();
+        diaryPage.addFood(Meals.LUNCH).addLunch();
+        double i2protein = mealsPage.getNutrients(Nutrients.PROTEIN);
+        double i2carbs = mealsPage.getNutrients(Nutrients.CARBS);
+        double i2fats = mealsPage.getNutrients(Nutrients.FAT);
+        double i2sugar = mealsPage.getNutrients(Nutrients.SUGAR);
         diaryPage.save();
-        diaryPage.quickAddLunch(randAmount);
-        int lunchCalories = diaryPage.getLunchCalories();
-        diaryPage.addExercise();
+        diaryPage.addFood(Meals.LUNCH).quickAddLunch(randAmount);
+        diaryPage.save();
+        int lunchCalories = diaryPage.getMealCalories(Meals.LUNCH);
         Assert.assertEquals(diaryPage.getItemsCalories(), lunchCalories, "Calories amount is not equal!");
+        diaryPage.clickExercise().addExercise();
+        diaryPage.save();
+        diaryPage.clickAlert();
         ProfilePageBase profilePage = diaryPage.openProfile();
         Assert.assertTrue(profilePage.isPageOpened(), "Profile page isn't opened");
         profilePage.openNutrition();
@@ -67,13 +86,64 @@ public class iOSmfpTest implements IAbstractTest, IMobileUtils {
         softAssert.assertEquals(profilePage.getFats(),profilePage.sumNutrients(i1fats, i2fats), "Fats amount is not equal!");
         softAssert.assertAll();
         profilePage.openMacros();
-        double totalMacros = profilePage.getTotalMacros(i1carbs,i1fats,i1protein, i2carbs, i2fats, i2protein);
+        Macros macros = new Macros(i1carbs,i1fats,i1protein,i2carbs,i2fats,i2protein);
+        double totalMacros = profilePage.getTotalMacros(macros);
         int carbsPercentage = profilePage.countCarbsPercentage(profilePage.sumNutrients(i1carbs, i2carbs), totalMacros);
         int fatsPercentage = profilePage.countCarbsPercentage(profilePage.sumNutrients(i1fats, i2fats), totalMacros);
         softAssert.assertEquals(profilePage.getCarbsPercentage(), carbsPercentage, "Carbs percentage is not equal!");
         softAssert.assertEquals(profilePage.getFatPercentage(), fatsPercentage, "Fat percentage is not equal!");
         softAssert.assertEquals(profilePage.getProteinPercentage(), profilePage.countProteinPercentage(carbsPercentage, fatsPercentage), "Protein percentage is not equal!");
         softAssert.assertAll();
+    }
+
+    @Test()
+    @TestPriority(Priority.P1)
+    public void testRemoveExercise() {
+        MyWelcomePageBase welcomePage = initPage(getDriver(), MyWelcomePageBase.class);
+        Assert.assertTrue(welcomePage.isPageOpened(), "Welcome page isn't opened");
+        SignUpPageBase signUpPage = welcomePage.clickSignUpBtn();
+        Assert.assertTrue(signUpPage.isPageOpened(), "Sign Up page isn't opened");
+        signUpPage.signUp();
+        signUpPage.pickGoals();
+        signUpPage.enterPersonalInfo();
+        signUpPage.enterWeight();
+        HomePageBase homePage = signUpPage.enterDetails(randEmail, randPasswd);
+        Assert.assertTrue(homePage.isPageOpened(), "Home page isn't opened");
+        DiaryPageBase diaryPage = homePage.openDiary();
+        Assert.assertTrue(diaryPage.isPageOpened(), "Diary page isn't opened");
+        ExerciseRoutinesPageBase exRoutinesPage = new ExerciseRoutinePage(getDriver());
+        diaryPage.clickExercise().clickWorkoutRoutine();
+        exRoutinesPage.addWorkoutRoutine1();
+        exRoutinesPage.saveRoutine();
+        exRoutinesPage.addWorkoutRoutine2();
+        exRoutinesPage.saveRoutine();
+        List<ExerciseRoutines> routinesList = exRoutinesPage.getRoutinesList();
+        Assert.assertEquals(exRoutinesPage.getNumberOfRoutines(routinesList), 2);
+        exRoutinesPage.openRoutineMenu();
+        exRoutinesPage.clickEditBtn();
+        List<Buttons> buttonsList = exRoutinesPage.getButtonsList();
+        List<String> buttonsTitlesList = new ArrayList<>();
+        for(Buttons n : buttonsList) {
+            buttonsTitlesList.add(n.readTitle());}
+        List<String> buttonsCheckList = new ArrayList<>();
+        buttonsCheckList.add("Remove Exercise");
+        buttonsCheckList.add("Duplicate Exercise");
+        buttonsCheckList.add("Reorder Exercise");
+        buttonsCheckList.add("Modify Stats");
+        buttonsCheckList.add("Cancel");
+        Assert.assertEquals(buttonsTitlesList, buttonsCheckList, "Buttons are not correct!");
+        exRoutinesPage.removeBtnClick();
+        List<Buttons> removalList = exRoutinesPage.getRemovalButtonsList();
+        List<String> removalTitlesList = new ArrayList<>();
+        for(Buttons r : removalList) {
+            removalTitlesList.add(r.readTitle());}
+        List<String> removalCheckList = new ArrayList<>();
+        removalCheckList.add("Cancel");
+        removalCheckList.add("Remove");
+        Assert.assertEquals(removalTitlesList, removalCheckList, "Buttons are not correct!");
+        exRoutinesPage.removeExercise();
+        List<ExerciseRoutines> newRoutinesList = exRoutinesPage.getRoutinesList();
+        Assert.assertEquals(exRoutinesPage.getNumberOfRoutines(newRoutinesList), 1);
     }
 
     @Test()

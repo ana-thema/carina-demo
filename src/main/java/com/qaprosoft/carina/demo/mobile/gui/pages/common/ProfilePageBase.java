@@ -1,6 +1,7 @@
 package com.qaprosoft.carina.demo.mobile.gui.pages.common;
 
 import com.qaprosoft.carina.core.gui.AbstractPage;
+import com.qaprosoft.carina.demo.mobile.gui.pages.additional.Macros;
 import org.openqa.selenium.WebDriver;
 
 public abstract class ProfilePageBase extends AbstractPage {
@@ -47,7 +48,7 @@ public abstract class ProfilePageBase extends AbstractPage {
 
     public abstract int countProteinPercentage(int carbsPercentage, int fatPercentage);
 
-    public abstract double getTotalMacros(double i1carbs, double i1fats, double i1protein, double i2carbs, double i2fats, double i2protein);
+    public abstract double getTotalMacros(Macros macros);
 
     public abstract void openMacros();
 }

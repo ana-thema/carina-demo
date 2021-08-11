@@ -154,10 +154,6 @@ public class MySignUpPage extends SignUpPageBase {
     public HomePageBase enterDetails(String randEmail, String randPasswd) {
         email.type(randEmail + "@gmail.com");
         password.type(randPasswd);
-        if (password.getElement().getText() != randPasswd){
-            password.getElement().clear();
-            password.type(randPasswd);
-        }
         signUpBtn.click();
         pause(10);
         continueBtn.click();
