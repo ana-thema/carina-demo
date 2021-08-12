@@ -23,14 +23,11 @@ import static java.lang.Integer.parseInt;
 public class DiaryPage extends DiaryPageBase {
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-    @FindBy(xpath = "//XCUIElementTypeOther[@name='%s']/following-sibling::XCUIElementTypeCell[1]/XCUIElementTypeButton[@name='ADD FOOD']")
+    @FindBy(xpath = "//XCUIElementTypeOther[@name='%s']/following-sibling::XCUIElementTypeCell/XCUIElementTypeButton[@name='ADD FOOD']")
     private ExtendedWebElement addFoodButton;
 
     @ExtendedFindBy(iosClassChain = "**/XCUIElementTypeButton[`name == 'ADD FOOD'`][1]")
     private ExtendedWebElement breakfast;
-
-    @ExtendedFindBy(iosClassChain = "**/XCUIElementTypeButton[`name == 'ADD FOOD'`][2]")
-    private ExtendedWebElement lunch;
 
     @ExtendedFindBy(iosClassChain = "**/XCUIElementTypeTable/XCUIElementTypeCell[4]/XCUIElementTypeStaticText[3]")
     private ExtendedWebElement item1cal;
@@ -65,7 +62,7 @@ public class DiaryPage extends DiaryPageBase {
 
     @Override
     public MealsPageBase addFood(Meals meal) {
-        addFoodButton.format("%s", meal.getName()).click();
+        addFoodButton.format(meal.getName()).click();
         return initPage(getDriver(), MealsPageBase.class);
     }
 
