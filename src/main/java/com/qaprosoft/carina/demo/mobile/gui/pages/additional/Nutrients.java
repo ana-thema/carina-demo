@@ -1,6 +1,7 @@
 package com.qaprosoft.carina.demo.mobile.gui.pages.additional;
 
 public enum Nutrients {
+    CALORIES("Calories"),
     PROTEIN("Protein"),
     CARBS("Carbs"),
     FAT("Fat"),
