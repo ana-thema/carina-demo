@@ -21,12 +21,6 @@ public class DiaryPage extends AbstractPage {
     @FindBy(xpath = "//td[contains(text(), '%s')] /../following-sibling::tr/td/a[@class='add_food']")
     private ExtendedWebElement addFoodBtn;
 
-    @FindBy(xpath = "//td[contains(text(), 'Breakfast')] /../following-sibling::tr/td/a[@class='add_food']")
-    private ExtendedWebElement addBreakfast;
-
-    @FindBy(xpath = "//td[contains(text(), 'Lunch')] /../following-sibling::tr/td/a[@class='add_food']")
-    private ExtendedWebElement addLunch;
-
     @FindBy(xpath = "//input[@id='search']")
     private ExtendedWebElement searchField;
 
@@ -93,19 +87,8 @@ public class DiaryPage extends AbstractPage {
     }
 
     public void enterFood(Meals meal) {
-        switch (meal.getName()) {
-            case ("Breakfast"): {
-                driver.getPageSource();
-                if (addBreakfast.isElementPresent())
-                    addBreakfast.click();
-                break;
-            }
-            case ("Lunch"): {
-                driver.getPageSource();
-                addLunch.click();
-                break;
-            }
-        }
+        driver.getPageSource();
+        addFoodBtn.format(meal.getName()).click();
     }
 
     public void enterExercise(){
@@ -120,7 +103,6 @@ public class DiaryPage extends AbstractPage {
     }
 
     public int getRemainingMacros(Nutrients nutrients) {
-        int m;
         switch (nutrients.getName()) {
             case ("Calories"): {
                 int r = parseInt(remaining.getElement().getText().replaceAll(",", ""));
@@ -128,23 +110,23 @@ public class DiaryPage extends AbstractPage {
                 return r;
             }
             case ("Carbs"): {
-                remainingMacros.format(1);
-                break;
+                int m = parseInt(remainingMacros.format(1).getElement().getText().replaceAll(",", ""));
+                LOGGER.info("Remaining " + nutrients.getName() + " " + m);
+                return m;
             }
             case ("Fat"): {
-                remainingMacros.format(2);
-                break;
+                int m = parseInt(remainingMacros.format(2).getElement().getText().replaceAll(",", ""));
+                LOGGER.info("Remaining " + nutrients.getName() + " " + m);
+                return m;
             }
             case ("Protein"): {
-                remainingMacros.format(3);
-                break;
+                int m = parseInt(remainingMacros.format(3).getElement().getText().replaceAll(",", ""));
+                LOGGER.info("Remaining " + nutrients.getName() + " " + m);
+                return m;
             }
             default:
                 throw new IllegalStateException("Unexpected value: " + nutrients.getName());
         }
-        m = parseInt(remainingMacros.getElement().getText().replaceAll(",", ""));
-        LOGGER.info("Remaining " + nutrients.getName() + " " + m);
-        return m;
     }
 
     public int calculateMacros(Nutrients nutrients) {
