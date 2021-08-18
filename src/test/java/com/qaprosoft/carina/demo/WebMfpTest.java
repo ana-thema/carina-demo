@@ -37,6 +37,7 @@ public class WebMfpTest implements IAbstractTest {
         LoginPage loginPage = homePage.getLoginPage();
         loginPage.auth(EMAIL, PASSWORD);
         DiaryPage diaryPage = homePage.addFood();
+        Assert.assertTrue(diaryPage.isPageOpened(), "Diary Page page is not opened");
         diaryPage.deleteAll();
         diaryPage.enterFood(Meals.BREAKFAST);
         SearchPage searchPage = diaryPage.addMealOrExercise(FoodItem1);
