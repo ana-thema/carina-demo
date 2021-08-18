@@ -141,28 +141,29 @@ public class DiaryPage extends AbstractPage {
                 return goalCal - totalCal;
             }
             case ("Carbs"): {
-                totalsMacros.format(1);
-                dailyGoalMacros.format(1);
-                break;
+                total = parseInt(totalsMacros.format(1).getElement().getText().replaceAll(",", ""));
+                goal = parseInt(dailyGoalMacros.format(1).getElement().getText().replaceAll(",", ""));
+                LOGGER.info("Total " + nutrients.getName() + " " + total);
+                LOGGER.info("Goal " + nutrients.getName() + " " + +goal);
+                return goal - total;
             }
             case ("Fat"): {
-                totalsMacros.format(2);
-                dailyGoalMacros.format(2);
-                break;
+                total = parseInt(totalsMacros.format(2).getElement().getText().replaceAll(",", ""));
+                goal = parseInt(dailyGoalMacros.format(2).getElement().getText().replaceAll(",", ""));
+                LOGGER.info("Total " + nutrients.getName() + " " + total);
+                LOGGER.info("Goal " + nutrients.getName() + " " + +goal);
+                return goal - total;
             }
             case ("Protein"): {
-                totalsMacros.format(3);
-                dailyGoalMacros.format(3);
-                break;
+                total = parseInt(totalsMacros.format(3).getElement().getText().replaceAll(",", ""));
+                goal = parseInt(dailyGoalMacros.format(3).getElement().getText().replaceAll(",", ""));
+                LOGGER.info("Total " + nutrients.getName() + " " + total);
+                LOGGER.info("Goal " + nutrients.getName() + " " + +goal);
+                return goal - total;
             }
             default:
                 throw new IllegalStateException("Unexpected value: " + nutrients.getName());
         }
-        total = parseInt(totalsMacros.getElement().getText().replaceAll(",", ""));
-        goal = parseInt(dailyGoalMacros.getElement().getText().replaceAll(",", ""));
-        LOGGER.info("Total " + nutrients.getName() + " " + total);
-        LOGGER.info("Goal " + nutrients.getName() + " " + +goal);
-        return goal - total;
     }
 
     public void deleteAll() {
