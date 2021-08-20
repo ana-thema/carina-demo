@@ -45,8 +45,7 @@ public class WebMfpTest implements IAbstractTest {
         searchPage.getRandomFoodItem(items1);
         searchPage.addFoodToDiary();
         diaryPage.enterFood(Meals.LUNCH);
-        searchPage = diaryPage.addMealOrExercise(FoodItem2);
-        List<FoodItem> items2 = searchPage.getMatchedFoodList();
+        List<FoodItem> items2 = diaryPage.addMealOrExercise(FoodItem2).getMatchedFoodList();
         searchPage.getRandomFoodItem(items2);
         searchPage.addFoodToDiary();
         SoftAssert softAssert = new SoftAssert();
@@ -61,8 +60,11 @@ public class WebMfpTest implements IAbstractTest {
         homePage.addExercise().enterExercise();
         List<ExerciseItem> exercises = diaryPage.addMealOrExercise(Exercise).getMatchedExList();
         searchPage.getRandomExItem(exercises);
+        int exCal = searchPage.getExerciseCalories();
         searchPage.addExerciseToDiary();
         diaryPage.returnHome();
+        Assert.assertEquals(homePage.getRemainingCaloriesHome(), homePage.getNewRemainingCalories(remaining, exCal), "Remaining calories amount is not equal");
+
     }
 
     @Test()

@@ -28,7 +28,7 @@ public class HomePage extends AbstractPage {
     @FindBy(xpath = "//div[@class='add-buttons']/a[2]")
     private ExtendedWebElement addFood;
 
-    @FindBy(xpath = "//div[@class='energy-remaining-number ']/.")
+    @FindBy(xpath = "//div[@class='energy-remaining-number ']")
     private ExtendedWebElement remainingHome;
 
     @FindBy(xpath = "//div[@class='value goal']/span")
@@ -64,5 +64,9 @@ public class HomePage extends AbstractPage {
         driver.getPageSource();
         addExercise.click();
         return new DiaryPage(driver);
+    }
+
+    public int getNewRemainingCalories(int remaining, int exerciseCal) {
+        return remaining + exerciseCal;
     }
 }

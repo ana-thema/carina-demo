@@ -65,11 +65,11 @@ public class SearchPage extends AbstractPage {
     }
 
     public int getExerciseCalories() {
+        exerciseQuantity.type("15");
         return parseInt(exerciseCalories.getElement().getText().replaceAll(",", ""));
     }
 
     public void addExerciseToDiary() {
-        exerciseQuantity.type("15");
         driver.getPageSource();
         waitUntil(ExpectedConditions.presenceOfElementLocated(addExerciseToDiaryBtn.getBy()), 5);
         addExerciseToDiaryBtn.click();
