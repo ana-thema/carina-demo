@@ -70,7 +70,4 @@ public class SearchPage extends AbstractPage {
         addExerciseToDiaryBtn.click();
     }
 
-    public int calculateNewRemaining(int remaining, int exercise) {
-        return remaining + exercise;
-    }
 }

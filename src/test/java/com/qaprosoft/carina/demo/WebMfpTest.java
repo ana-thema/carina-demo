@@ -67,9 +67,8 @@ public class WebMfpTest implements IAbstractTest {
         searchPage.addExerciseToDiary();
         diaryPage.returnHome();
         Assert.assertTrue(homePage.isPageOpened(), "Home Page page is not opened");
-        int exerciseCal = homePage.getExerciseCalories();
         Assert.assertEquals(homePage.calculateNet(), homePage.getNetCal(), "Net calories amount is not the same!");
-        Assert.assertEquals(homePage.calculateRemaining(), searchPage.calculateNewRemaining(remaining, exerciseCal), "Remaining calories amount is not equal");
+        Assert.assertEquals(homePage.calculateRemaining(), homePage.getRemainingCaloriesHome(), "Remaining calories amount is not equal");
     }
 
     @Test()

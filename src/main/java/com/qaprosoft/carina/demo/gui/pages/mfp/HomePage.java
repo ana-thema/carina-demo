@@ -83,10 +83,12 @@ public class HomePage extends AbstractPage {
     }
 
     public int getRemainingCaloriesHome() {
+        waitUntil(ExpectedConditions.presenceOfElementLocated(remainingHome.getBy()), 10);
         return parseInt(remainingHome.getElement().getText().replaceAll(",", ""));
     }
 
     public int getExerciseCalories() {
+        waitUntil(ExpectedConditions.presenceOfElementLocated(exCalHome.getBy()), 10);
         return parseInt(exCalHome.getElement().getText().replaceAll(",", ""));
     }
 
