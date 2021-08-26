@@ -87,12 +87,6 @@ public class HomePage extends AbstractPage {
         return parseInt(remainingHome.getElement().getText().replaceAll(",", ""));
     }
 
-    public int getExerciseCalories() {
-        waitUntil(ExpectedConditions.presenceOfElementLocated(exCalHome.getBy()), 10);
-        return parseInt(exCalHome.getElement().getText().replaceAll(",", ""));
-    }
-
-
     public int calculateNet() {
         waitUntil(ExpectedConditions.presenceOfElementLocated(foodCalHome.getBy()), 10);
         int foodCal = parseInt(foodCalHome.getElement().getText().replaceAll(",", ""));
@@ -116,9 +110,5 @@ public class HomePage extends AbstractPage {
         driver.getPageSource();
         addExercise.click();
         return new DiaryPage(driver);
-    }
-
-    public int getNewRemainingCalories(int remaining, int exerciseCal) {
-        return remaining + exerciseCal;
     }
 }
