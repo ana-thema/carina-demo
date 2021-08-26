@@ -64,14 +64,13 @@ public class SearchPage extends AbstractPage {
         addFoodToDiaryBtn.click();
     }
 
-    public int getExerciseCalories() {
-        exerciseQuantity.type("15");
-        return parseInt(exerciseCalories.getElement().getText().replaceAll(",", ""));
-    }
-
     public void addExerciseToDiary() {
-        driver.getPageSource();
+        exerciseQuantity.type("15");
         waitUntil(ExpectedConditions.presenceOfElementLocated(addExerciseToDiaryBtn.getBy()), 5);
         addExerciseToDiaryBtn.click();
+    }
+
+    public int calculateNewRemaining(int remaining, int exercise) {
+        return remaining + exercise;
     }
 }

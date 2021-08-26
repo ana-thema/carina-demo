@@ -16,12 +16,18 @@ public class LoginPage extends AbstractPage {
     @FindBy(xpath = "//li[@class='submit']/input[@value='Log In']")
     private ExtendedWebElement loginBtn;
 
+    @FindBy(xpath = "//div[@class='ccpa-banner-container']/i")
+    private ExtendedWebElement close;
+
     public LoginPage(WebDriver driver) {
         super(driver);
         setPageURL("/account/login");
     }
 
     public void auth(String email, String password){
+        driver.getPageSource();
+        if (close.isElementPresent())
+            close.click();
         emailAddressField.type(email);
         passwordField.type(password);
         loginBtn.click();
